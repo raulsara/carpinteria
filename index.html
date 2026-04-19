@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MaderArte — Carpintería Artesanal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brown-dark:  #3b2009;
+      --brown-mid:   #7c4a1e;
+      --brown-light: #c8874b;
+      --cream:       #f5efe6;
+      --cream-dark:  #ede0cc;
+      --white:       #ffffff;
+      --text:        #2c1a0e;
+      --text-muted:  #7a5c44;
+      --radius:      12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 6%;
+      background: rgba(59, 32, 9, 0.92);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      color: var(--cream);
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+    }
+
+    .nav-logo span { color: var(--brown-light); }
+
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      color: var(--cream-dark);
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 500;
+      letter-spacing: .5px;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--brown-light); }
+
+    .nav-cta {
+      background: var(--brown-light);
+      color: var(--white) !important;
+      padding: 8px 22px;
+      border-radius: 50px;
+    }
+    .nav-cta:hover { background: #e09a5d !important; color: var(--white) !important; }
+
+    /* hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 26px; height: 2px; background: var(--cream); border-radius: 2px; transition: .3s; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #3b2009 0%, #5c2f0f 50%, #7c4a1e 100%);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 6% 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .hero-content { position: relative; max-width: 720px; }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(200, 135, 75, 0.2);
+      border: 1px solid var(--brown-light);
+      color: var(--brown-light);
+      padding: 6px 18px;
+      border-radius: 50px;
+      font-size: .8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .hero-content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.6rem, 6vw, 4.2rem);
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 22px;
+    }
+
+    .hero-content h1 em { color: var(--brown-light); font-style: normal; }
+
+    .hero-content p {
+      color: var(--cream-dark);
+      font-size: 1.1rem;
+      max-width: 560px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--brown-light);
+      color: var(--white);
+      padding: 14px 36px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: .95rem;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 20px rgba(200,135,75,.4);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(200,135,75,.5); }
+
+    .btn-outline {
+      border: 2px solid rgba(255,255,255,.4);
+      color: var(--white);
+      padding: 14px 36px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: .95rem;
+      transition: background .2s;
+    }
+    .btn-outline:hover { background: rgba(255,255,255,.1); }
+
+    .hero-stats {
+      display: flex; gap: 48px; justify-content: center; flex-wrap: wrap;
+      margin-top: 64px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255,255,255,.12);
+    }
+
+    .stat strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      color: var(--brown-light);
+    }
+    .stat span { color: var(--cream-dark); font-size: .85rem; }
+
+    /* ── SECTIONS SHARED ── */
+    section { padding: 96px 6%; }
+
+    .section-tag {
+      display: inline-block;
+      background: var(--brown-light);
+      color: var(--white);
+      padding: 4px 14px;
+      border-radius: 50px;
+      font-size: .75rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      margin-bottom: 16px;
+      line-height: 1.25;
+    }
+
+    .section-sub {
+      color: var(--text-muted);
+      max-width: 520px;
+      font-size: 1rem;
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--white); }
+
+    .services-header { text-align: center; margin-bottom: 60px; }
+    .services-header .section-sub { margin: 0 auto; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .service-card {
+      background: var(--cream);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      border: 1px solid var(--cream-dark);
+      transition: transform .25s, box-shadow .25s;
+      cursor: default;
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px rgba(59,32,9,.1);
+    }
+
+    .service-icon {
+      width: 56px; height: 56px;
+      background: var(--brown-dark);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 22px;
+    }
+
+    .service-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .service-card p { color: var(--text-muted); font-size: .9rem; line-height: 1.7; }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-img-main {
+      width: 100%;
+      aspect-ratio: 4/5;
+      background: linear-gradient(160deg, var(--brown-dark), var(--brown-mid));
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 6rem;
+      overflow: hidden;
+    }
+
+    .about-badge-float {
+      position: absolute;
+      bottom: -20px; right: -20px;
+      background: var(--brown-light);
+      color: var(--white);
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(200,135,75,.35);
+    }
+    .about-badge-float strong { display: block; font-size: 2rem; font-family: 'Playfair Display', serif; }
+    .about-badge-float span { font-size: .78rem; }
+
+    .about-text { padding: 20px 0; }
+    .about-text p { color: var(--text-muted); margin-bottom: 18px; line-height: 1.8; }
+
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 12px; margin: 28px 0 36px; }
+    .checklist li { display: flex; align-items: center; gap: 12px; font-size: .95rem; }
+    .checklist li::before {
+      content: '✓';
+      min-width: 28px; height: 28px;
+      background: var(--brown-dark);
+      color: var(--brown-light);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .8rem; font-weight: 700;
+    }
+
+    /* ── PORTFOLIO ── */
+    #portfolio { background: var(--white); }
+    .portfolio-header { margin-bottom: 48px; }
+
+    .portfolio-filters {
+      display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px;
+    }
+
+    .filter-btn {
+      padding: 8px 20px;
+      border-radius: 50px;
+      border: 1.5px solid var(--cream-dark);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: .85rem;
+      font-family: 'Inter', sans-serif;
+      transition: .2s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--brown-dark);
+      border-color: var(--brown-dark);
+      color: var(--white);
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      max-width: 1200px;
+    }
+
+    .portfolio-item {
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: transform .25s;
+    }
+    .portfolio-item:hover { transform: scale(1.02); }
+
+    .portfolio-thumb {
+      aspect-ratio: 4/3;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem;
+    }
+
+    .p-muebles   { background: linear-gradient(135deg, #5c3010, #8b4c25); }
+    .p-puertas   { background: linear-gradient(135deg, #6b3a18, #a0612e); }
+    .p-cocinas   { background: linear-gradient(135deg, #4a2810, #7c4a1e); }
+    .p-exteriores{ background: linear-gradient(135deg, #3b2009, #6b3a18); }
+    .p-restauracion{ background: linear-gradient(135deg, #7c4a1e, #c8874b); }
+    .p-escaleras { background: linear-gradient(135deg, #5c2f0f, #9a5820); }
+
+    .portfolio-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(59,32,9,.9) 0%, transparent 55%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 22px;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+
+    .portfolio-overlay h4 {
+      color: var(--white);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+    .portfolio-overlay span { color: var(--brown-light); font-size: .8rem; }
+
+    /* ── PROCESS ── */
+    #proceso { background: var(--brown-dark); }
+
+    .process-header { text-align: center; margin-bottom: 60px; }
+    .process-header .section-title { color: var(--white); }
+    .process-header .section-sub { color: rgba(255,255,255,.6); margin: 0 auto; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+      max-width: 1100px;
+      margin: 0 auto;
+      counter-reset: step;
+    }
+
+    .step {
+      text-align: center;
+      padding: 36px 24px;
+      background: rgba(255,255,255,.05);
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.08);
+      counter-increment: step;
+      position: relative;
+    }
+
+    .step::before {
+      content: counter(step, decimal-leading-zero);
+      position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
+      background: var(--brown-light);
+      color: var(--white);
+      font-size: .75rem; font-weight: 700; letter-spacing: 1px;
+      padding: 4px 14px;
+      border-radius: 50px;
+    }
+
+    .step-icon { font-size: 2.4rem; margin-bottom: 16px; }
+    .step h4 { color: var(--white); font-family: 'Playfair Display', serif; margin-bottom: 10px; }
+    .step p { color: rgba(255,255,255,.55); font-size: .88rem; line-height: 1.7; }
+
+    /* ── TESTIMONIALS ── */
+    #testimonios { background: var(--cream); }
+    .testimonios-header { text-align: center; margin-bottom: 56px; }
+
+    .testimonios-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .testimonial-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 32px;
+      border: 1px solid var(--cream-dark);
+      position: relative;
+    }
+
+    .stars { color: #f0a030; font-size: 1rem; margin-bottom: 16px; letter-spacing: 2px; }
+
+    .testimonial-card p {
+      color: var(--text-muted);
+      font-size: .95rem;
+      line-height: 1.75;
+      font-style: italic;
+      margin-bottom: 22px;
+    }
+
+    .reviewer {
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    .reviewer-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--brown-dark);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .reviewer-info strong { display: block; font-size: .9rem; }
+    .reviewer-info span { color: var(--text-muted); font-size: .78rem; }
+
+    .quote-mark {
+      position: absolute; top: 20px; right: 26px;
+      font-size: 5rem;
+      color: var(--cream-dark);
+      font-family: Georgia, serif;
+      line-height: 1;
+    }
+
+    /* ── CONTACT ── */
+    #contacto { background: var(--white); }
+
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 72px;
+      align-items: start;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .contact-info .section-sub { margin-bottom: 40px; }
+
+    .contact-items { display: flex; flex-direction: column; gap: 22px; }
+
+    .contact-item {
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+
+    .contact-item-icon {
+      width: 46px; height: 46px; min-width: 46px;
+      background: var(--brown-dark);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .contact-item h5 { font-size: .8rem; color: var(--text-muted); margin-bottom: 3px; text-transform: uppercase; letter-spacing: 1px; }
+    .contact-item p { font-size: .95rem; font-weight: 500; }
+
+    .contact-form {
+      background: var(--cream);
+      border-radius: 20px;
+      padding: 44px;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
+    .form-group label { font-size: .8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .8px; }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1.5px solid var(--cream-dark);
+      background: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: .9rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--brown-light);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 120px; }
+
+    .form-submit {
+      width: 100%;
+      padding: 15px;
+      background: var(--brown-dark);
+      color: var(--white);
+      border: none;
+      border-radius: 50px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .form-submit:hover { background: var(--brown-mid); transform: translateY(-1px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--brown-dark);
+      color: var(--cream-dark);
+      padding: 60px 6% 30px;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .footer-brand .nav-logo { display: block; margin-bottom: 14px; font-size: 1.4rem; }
+    .footer-brand p { color: rgba(255,255,255,.45); font-size: .85rem; line-height: 1.7; }
+
+    .footer-col h5 {
+      color: var(--brown-light);
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 18px;
+    }
+
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col a { color: rgba(255,255,255,.5); text-decoration: none; font-size: .88rem; transition: color .2s; }
+    .footer-col a:hover { color: var(--brown-light); }
+
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 28px;
+      font-size: .82rem;
+      color: rgba(255,255,255,.3);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .social-links { display: flex; gap: 12px; }
+    .social-link {
+      width: 38px; height: 38px;
+      background: rgba(255,255,255,.07);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .social-link:hover { background: var(--brown-light); }
+
+    /* ── FLOATING WA BUTTON ── */
+    .wa-float {
+      position: fixed;
+      bottom: 32px; right: 32px;
+      width: 58px; height: 58px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.7rem;
+      box-shadow: 0 6px 24px rgba(37,211,102,.4);
+      text-decoration: none;
+      z-index: 999;
+      transition: transform .2s;
+    }
+    .wa-float:hover { transform: scale(1.1); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      #about { grid-template-columns: 1fr; gap: 48px; padding: 64px 6%; }
+      .about-visual { max-width: 420px; margin: 0 auto; }
+      .contact-wrap { grid-template-columns: 1fr; gap: 48px; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 16px 5%; }
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: var(--brown-dark); padding: 20px 5%; gap: 18px; }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .hero-stats { gap: 28px; }
+      .contact-form { padding: 28px 22px; }
+    }
+
+    /* ── ANIMATIONS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">Mader<span>Arte</span></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#proceso">Proceso</a></li>
+    <li><a href="#testimonios">Clientes</a></li>
+    <li><a href="#contacto" class="nav-cta">Presupuesto</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content reveal">
+    <div class="hero-badge">✦ Carpintería Artesanal Premium</div>
+    <h1>Madera que cuenta<br /><em>historias eternas</em></h1>
+    <p>Creamos muebles, puertas y espacios de madera hechos a medida con precisión artesanal y materiales de primera calidad.</p>
+    <div class="hero-btns">
+      <a href="#contacto" class="btn-primary">Solicitar presupuesto</a>
+      <a href="#portfolio" class="btn-outline">Ver trabajos</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><strong>18+</strong><span>Años de experiencia</span></div>
+      <div class="stat"><strong>640</strong><span>Proyectos completados</span></div>
+      <div class="stat"><strong>100%</strong><span>Clientes satisfechos</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="servicios">
+  <div class="services-header reveal">
+    <span class="section-tag">Servicios</span>
+    <h2 class="section-title">Todo en madera, hecho a tu medida</h2>
+    <p class="section-sub">Cada proyecto es único. Trabajamos desde el diseño hasta la instalación final con dedicación total.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon">🪑</div>
+      <h3>Muebles a Medida</h3>
+      <p>Diseñamos y fabricamos muebles personalizados para cada rincón de tu hogar u oficina: armarios, estanterías, mesas y más.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🚪</div>
+      <h3>Puertas y Ventanas</h3>
+      <p>Carpintería exterior e interior en maderas nobles. Fabricación e instalación con sellado perfecto y acabado a medida.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🍳</div>
+      <h3>Cocinas Integrales</h3>
+      <p>Cocinas completas en madera maciza o lacada, con diseño funcional y estética impecable adaptada a tu espacio.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🏡</div>
+      <h3>Terrazas y Exteriores</h3>
+      <p>Pérgolas, tarimas, cerramientos y mobiliario para exterior con maderas tratadas que resisten la intemperie.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🔨</div>
+      <h3>Restauración</h3>
+      <p>Devolvemos la vida a muebles y estructuras antiguas: lijado, tratamiento, barnizado y reparación de daños.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🪵</div>
+      <h3>Estructuras de Madera</h3>
+      <p>Escaleras, techos, forjados y estructuras de madera para proyectos de construcción y reforma integrales.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🟫</div>
+      <h3>Instalación de Parquet</h3>
+      <p>Colocación de parquet macizo, laminado y multicapa con acabados perfectos. Lijado, barnizado y restauración de suelos de madera existentes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="nosotros" style="background:var(--cream); padding:96px 6%;">
+  <div style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center;">
+    <div class="about-visual reveal">
+      <div class="about-img-main">🪵</div>
+      <div class="about-badge-float">
+        <strong>18</strong>
+        <span>años de oficio</span>
+      </div>
+    </div>
+    <div class="about-text reveal">
+      <span class="section-tag">Nosotros</span>
+      <h2 class="section-title">Pasión por la madera desde 2007</h2>
+      <p>Somos un taller familiar con más de 18 años de experiencia en carpintería artesanal. Combinamos técnicas tradicionales con herramientas modernas para garantizar resultados perfectos.</p>
+      <p>Cada pieza que fabricamos lleva el sello de nuestra dedicación: materiales seleccionados, acabados impecables y plazos de entrega cumplidos.</p>
+      <ul class="checklist">
+        <li>Maderas certificadas y sostenibles</li>
+        <li>Presupuesto sin compromiso en 24h</li>
+        <li>Garantía de 5 años en todos los trabajos</li>
+        <li>Instalación incluida en toda la provincia</li>
+        <li>Diseño personalizado con visita al domicilio</li>
+      </ul>
+      <a href="#contacto" class="btn-primary" style="display:inline-block;">Hablar con un carpintero</a>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="portfolio-header reveal">
+    <span class="section-tag">Portfolio</span>
+    <h2 class="section-title">Trabajos que hablan por sí solos</h2>
+    <p class="section-sub" style="margin-bottom:0">Una selección de proyectos recientes en distintas especialidades.</p>
+  </div>
+  <div class="portfolio-filters reveal">
+    <button class="filter-btn active" onclick="filterPortfolio('all', this)">Todos</button>
+    <button class="filter-btn" onclick="filterPortfolio('muebles', this)">Muebles</button>
+    <button class="filter-btn" onclick="filterPortfolio('puertas', this)">Puertas</button>
+    <button class="filter-btn" onclick="filterPortfolio('cocinas', this)">Cocinas</button>
+    <button class="filter-btn" onclick="filterPortfolio('exteriores', this)">Exteriores</button>
+  </div>
+  <div class="portfolio-grid" id="portfolioGrid">
+    <div class="portfolio-item" data-cat="muebles">
+      <div class="portfolio-thumb p-muebles">🛋️</div>
+      <div class="portfolio-overlay"><h4>Armario empotrado roble</h4><span>Muebles</span></div>
+    </div>
+    <div class="portfolio-item" data-cat="cocinas">
+      <div class="portfolio-thumb p-cocinas">🍳</div>
+      <div class="portfolio-overlay"><h4>Cocina en madera maciza</h4><span>Cocinas</span></div>
+    </div>
+    <div class="portfolio-item" data-cat="puertas">
+      <div class="portfolio-thumb p-puertas">🚪</div>
+      <div class="portfolio-overlay"><h4>Puerta de entrada nogal</h4><span>Puertas</span></div>
+    </div>
+    <div class="portfolio-item" data-cat="exteriores">
+      <div class="portfolio-thumb p-exteriores">🏡</div>
+      <div class="portfolio-overlay"><h4>Pérgola de jardín</h4><span>Exteriores</span></div>
+    </div>
+    <div class="portfolio-item" data-cat="muebles">
+      <div class="portfolio-thumb p-restauracion">🔄</div>
+      <div class="portfolio-overlay"><h4>Restauración cómoda antigua</h4><span>Muebles</span></div>
+    </div>
+    <div class="portfolio-item" data-cat="muebles">
+      <div class="portfolio-thumb p-escaleras">🪜</div>
+      <div class="portfolio-overlay"><h4>Escalera madera maciza</h4><span>Muebles</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="proceso">
+  <div class="process-header reveal">
+    <span class="section-tag" style="background:var(--brown-light);">Proceso</span>
+    <h2 class="section-title">¿Cómo trabajamos?</h2>
+    <p class="section-sub">Un proceso claro y transparente desde la primera conversación hasta la entrega final.</p>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-icon">💬</div>
+      <h4>Consulta inicial</h4>
+      <p>Nos cuentas tu idea o necesidad. Visita gratuita al domicilio para tomar medidas y entender el espacio.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-icon">📐</div>
+      <h4>Diseño y presupuesto</h4>
+      <p>Elaboramos planos detallados y un presupuesto sin sorpresas en menos de 24 horas.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-icon">🪵</div>
+      <h4>Selección de madera</h4>
+      <p>Elegimos juntos el tipo de madera, acabados y detalles. Trabajamos solo con proveedores certificados.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-icon">⚙️</div>
+      <h4>Fabricación</h4>
+      <p>Elaboramos cada pieza en nuestro taller con precisión milimétrica y control de calidad constante.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-icon">🔧</div>
+      <h4>Instalación</h4>
+      <p>Nuestro equipo instala todo en el tiempo acordado, cuidando cada detalle de la puesta en escena.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-icon">✅</div>
+      <h4>Entrega y garantía</h4>
+      <p>Revisamos contigo el resultado final. 5 años de garantía y soporte postventa incluidos.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonios">
+  <div class="testimonios-header reveal">
+    <span class="section-tag">Testimonios</span>
+    <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+  </div>
+  <div class="testimonios-grid">
+    <div class="testimonial-card reveal">
+      <div class="quote-mark">"</div>
+      <div class="stars">★★★★★</div>
+      <p>El armario que me hicieron a medida es exactamente lo que imaginaba. Calidad excelente y el equipo muy profesional en todo momento.</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">👤</div>
+        <div class="reviewer-info">
+          <strong>María García</strong>
+          <span>Armario empotrado · Madrid</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="quote-mark">"</div>
+      <div class="stars">★★★★★</div>
+      <p>Nos reformaron toda la cocina en madera de roble. El resultado superó todas las expectativas. Presupuesto claro y sin sorpresas.</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">👤</div>
+        <div class="reviewer-info">
+          <strong>Carlos Ruiz</strong>
+          <span>Cocina integral · Barcelona</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="quote-mark">"</div>
+      <div class="stars">★★★★★</div>
+      <p>Restauraron un mueble de mi abuela que parecía imposible de salvar. Quedó como nuevo, con mimo y detalle artesanal único.</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">👤</div>
+        <div class="reviewer-info">
+          <strong>Ana López</strong>
+          <span>Restauración · Sevilla</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contacto">
+  <div class="contact-wrap">
+    <div class="contact-info reveal">
+      <span class="section-tag">Contacto</span>
+      <h2 class="section-title">¿Tienes un proyecto en mente?</h2>
+      <p class="section-sub">Cuéntanos tu idea y te enviamos un presupuesto detallado sin ningún compromiso.</p>
+      <div class="contact-items">
+        <div class="contact-item">
+          <div class="contact-item-icon">📍</div>
+          <div>
+            <h5>Taller</h5>
+            <p>C/ Artesanos 14, Polígono Industrial Norte</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📞</div>
+          <div>
+            <h5>Teléfono</h5>
+            <p>+34 612 345 678</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">✉️</div>
+          <div>
+            <h5>Email</h5>
+            <p>info@maderarte.es</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">🕐</div>
+          <div>
+            <h5>Horario</h5>
+            <p>Lun–Vie: 8:00–18:00 · Sáb: 9:00–13:00</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form reveal">
+      <h3 style="font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:28px;">Solicitar presupuesto</h3>
+      <form onsubmit="submitForm(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" placeholder="Tu nombre" required />
+          </div>
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input type="tel" placeholder="+34 600 000 000" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="correo@ejemplo.com" required />
+        </div>
+        <div class="form-group">
+          <label>Tipo de proyecto</label>
+          <select>
+            <option value="">Selecciona una opción</option>
+            <option>Muebles a medida</option>
+            <option>Cocina integral</option>
+            <option>Puertas y ventanas</option>
+            <option>Terraza / Exterior</option>
+            <option>Instalación de parquet</option>
+            <option>Restauración</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Descripción del proyecto</label>
+          <textarea placeholder="Cuéntanos los detalles de tu proyecto, dimensiones aproximadas, material preferido..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Enviar solicitud →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="nav-logo">Mader<span>Arte</span></span>
+      <p>Carpintería artesanal con más de 18 años de experiencia. Cada pieza, una obra.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Servicios</h5>
+      <ul>
+        <li><a href="#servicios">Muebles a medida</a></li>
+        <li><a href="#servicios">Cocinas integrales</a></li>
+        <li><a href="#servicios">Puertas y ventanas</a></li>
+        <li><a href="#servicios">Terrazas</a></li>
+        <li><a href="#servicios">Restauración</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Empresa</h5>
+      <ul>
+        <li><a href="#nosotros">Sobre nosotros</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#testimonios">Testimonios</a></li>
+        <li><a href="#proceso">Proceso</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contacto</h5>
+      <ul>
+        <li><a href="tel:+34612345678">+34 612 345 678</a></li>
+        <li><a href="mailto:info@maderarte.es">info@maderarte.es</a></li>
+        <li><a href="#contacto">Pedir presupuesto</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 MaderArte. Todos los derechos reservados.</p>
+    <div class="social-links">
+      <a class="social-link" href="#">📘</a>
+      <a class="social-link" href="#">📸</a>
+      <a class="social-link" href="#">▶️</a>
+    </div>
+  </div>
+</footer>
+
+<!-- WhatsApp FAB -->
+<a class="wa-float" href="https://wa.me/34612345678" target="_blank" title="WhatsApp">💬</a>
+
+<script>
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Portfolio filter
+  function filterPortfolio(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.portfolio-item').forEach(item => {
+      const match = cat === 'all' || item.dataset.cat === cat;
+      item.style.display = match ? 'block' : 'none';
+    });
+  }
+
+  // Form submit
+  function submitForm(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.form-submit');
+    btn.textContent = '✓ ¡Solicitud enviada!';
+    btn.style.background = '#2d7a3a';
+    setTimeout(() => {
+      btn.textContent = 'Enviar solicitud →';
+      btn.style.background = '';
+      e.target.reset();
+    }, 3000);
+  }
+
+  // Sticky nav shadow
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').style.boxShadow =
+      window.scrollY > 20 ? '0 4px 20px rgba(0,0,0,.25)' : 'none';
+  });
+</script>
+</body>
+</html>
