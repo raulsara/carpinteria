@@ -532,6 +532,70 @@
     }
     .form-submit:hover { background: var(--brown-mid); transform: translateY(-1px); }
 
+    /* ── PRESUPUESTO WIZARD ── */
+    .form-steps { display: flex; align-items: flex-start; gap: 0; margin-bottom: 28px; }
+    .step-dot {
+      width: 32px; height: 32px; min-width: 32px;
+      border-radius: 50%;
+      background: var(--cream-dark);
+      color: var(--text-muted);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .8rem; font-weight: 700;
+      transition: background .3s, color .3s;
+    }
+    .step-dot.active { background: var(--brown-dark); color: #fff; }
+    .step-dot.done   { background: var(--brown-light); color: #fff; }
+    .step-line { flex: 1; height: 2px; background: var(--cream-dark); margin-top: 15px; transition: background .3s; }
+    .step-line.done { background: var(--brown-light); }
+    .step-col { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .step-col-label { font-size: .7rem; color: var(--text-muted); white-space: nowrap; }
+
+    .form-step { display: none; }
+    .form-step.active { display: block; }
+
+    .budget-bar {
+      background: linear-gradient(135deg, var(--brown-dark) 0%, var(--brown-mid) 100%);
+      border-radius: 12px; padding: 16px 20px; margin-bottom: 18px;
+      display: none; color: #fff;
+    }
+    .budget-bar.visible { display: block; }
+    .budget-bar-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .8px; opacity: .75; margin-bottom: 4px; font-weight: 600; }
+    .budget-range { font-size: 1.5rem; font-weight: 700; font-family: 'Playfair Display', serif; }
+    .budget-note { font-size: .76rem; opacity: .7; margin-top: 4px; }
+
+    .form-nav { display: flex; gap: 12px; margin-top: 4px; }
+    .btn-prev {
+      flex: 0 0 auto; padding: 15px 22px;
+      background: transparent; color: var(--text-muted);
+      border: 1.5px solid var(--cream-dark); border-radius: 50px;
+      font-family: 'Inter', sans-serif; font-size: .9rem; font-weight: 600;
+      cursor: pointer; transition: border-color .2s, color .2s;
+    }
+    .btn-prev:hover { border-color: var(--brown-light); color: var(--brown-mid); }
+
+    .form-submit-wa {
+      flex: 1; padding: 15px;
+      background: #25D366; color: #fff; border: none; border-radius: 50px;
+      font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600;
+      cursor: pointer; transition: background .2s, transform .2s;
+    }
+    .form-submit-wa:hover { background: #1ebe5d; transform: translateY(-1px); }
+
+    .size-row { display: grid; grid-template-columns: 1fr 48px; gap: 8px; align-items: end; }
+    .size-unit { font-size: .82rem; color: var(--text-muted); padding-bottom: 14px; font-weight: 600; }
+
+    .step-summary {
+      background: var(--white); border-radius: 12px; padding: 16px 18px;
+      margin-bottom: 16px; border: 1.5px solid var(--cream-dark);
+    }
+    .step-summary h5 { font-size: .72rem; text-transform: uppercase; letter-spacing: .8px; color: var(--text-muted); margin-bottom: 10px; font-weight: 600; }
+    .summary-row { display: flex; justify-content: space-between; font-size: .88rem; padding: 4px 0; border-bottom: 1px solid var(--cream-dark); }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row span:first-child { color: var(--text-muted); }
+    .summary-row span:last-child { font-weight: 600; color: var(--text); }
+    .field-error { border-color: #c0392b !important; }
+    .error-msg { color: #c0392b; font-size: .78rem; margin-top: 2px; }
+
     /* ── FOOTER ── */
     footer {
       background: var(--brown-dark);
@@ -904,40 +968,128 @@
       </div>
     </div>
     <div class="contact-form reveal">
-      <h3 style="font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:28px;">Solicitar presupuesto</h3>
-      <form onsubmit="submitForm(event)">
-        <div class="form-row">
+      <h3 style="font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:24px;">Solicitar presupuesto</h3>
+
+      <!-- Indicador de pasos -->
+      <div class="form-steps">
+        <div class="step-col">
+          <div class="step-dot active" id="dot1">1</div>
+          <div class="step-col-label">Proyecto</div>
+        </div>
+        <div class="step-line" id="line1"></div>
+        <div class="step-col">
+          <div class="step-dot" id="dot2">2</div>
+          <div class="step-col-label">Tus datos</div>
+        </div>
+        <div class="step-line" id="line2"></div>
+        <div class="step-col">
+          <div class="step-dot" id="dot3">3</div>
+          <div class="step-col-label">Confirmar</div>
+        </div>
+      </div>
+
+      <form id="presupuesto-form" onsubmit="sendWhatsApp(event)">
+
+        <!-- PASO 1: Proyecto -->
+        <div class="form-step active" id="step1">
           <div class="form-group">
-            <label>Nombre</label>
-            <input type="text" placeholder="Tu nombre" required />
+            <label>Tipo de proyecto *</label>
+            <select id="f-tipo" onchange="updateEstimate()">
+              <option value="">Selecciona una opción</option>
+              <option value="muebles">Muebles a medida</option>
+              <option value="cocina">Cocina integral</option>
+              <option value="puertas">Puertas y ventanas</option>
+              <option value="terraza">Terraza / Exterior</option>
+              <option value="parquet">Instalación de parquet</option>
+              <option value="restauracion">Restauración</option>
+              <option value="otro">Otro</option>
+            </select>
           </div>
           <div class="form-group">
-            <label>Teléfono</label>
-            <input type="tel" placeholder="+34 600 000 000" />
+            <label>Material preferido</label>
+            <select id="f-material">
+              <option value="">Sin preferencia</option>
+              <option>Roble natural</option>
+              <option>Pino</option>
+              <option>Nogal</option>
+              <option>Cerezo</option>
+              <option>MDF lacado</option>
+              <option>Melamina</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label id="size-label">Superficie aproximada</label>
+            <div class="size-row">
+              <input type="number" id="f-size" min="1" placeholder="0" oninput="updateEstimate()" />
+              <div class="size-unit" id="size-unit">m²</div>
+            </div>
+          </div>
+          <div class="budget-bar" id="budget-bar">
+            <div class="budget-bar-label">Estimación orientativa</div>
+            <div class="budget-range" id="budget-range">—</div>
+            <div class="budget-note">Precio final tras visita técnica gratuita</div>
+          </div>
+          <div class="form-group">
+            <label>Plazo deseado</label>
+            <select id="f-plazo">
+              <option value="Sin prisa">Sin prisa</option>
+              <option value="1–2 meses">1–2 meses</option>
+              <option value="Menos de 1 mes">Menos de 1 mes</option>
+              <option value="Urgente">Urgente</option>
+            </select>
+          </div>
+          <button type="button" class="form-submit" onclick="goStep(2)">Siguiente →</button>
+        </div>
+
+        <!-- PASO 2: Datos de contacto -->
+        <div class="form-step" id="step2">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nombre *</label>
+              <input type="text" id="f-nombre" placeholder="Tu nombre" />
+            </div>
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input type="tel" id="f-telefono" placeholder="+34 600 000 000" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="f-email" placeholder="correo@ejemplo.com" />
+          </div>
+          <div class="form-group">
+            <label>Descripción del proyecto</label>
+            <textarea id="f-desc" placeholder="Dimensiones exactas, acabados, referencias de fotos..."></textarea>
+          </div>
+          <div class="form-nav">
+            <button type="button" class="btn-prev" onclick="goStep(1)">← Atrás</button>
+            <button type="button" class="form-submit" style="flex:1" onclick="goStep(3)">Siguiente →</button>
           </div>
         </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" placeholder="correo@ejemplo.com" required />
+
+        <!-- PASO 3: Confirmación -->
+        <div class="form-step" id="step3">
+          <div class="step-summary">
+            <h5>Resumen de tu solicitud</h5>
+            <div class="summary-row"><span>Proyecto</span><span id="s-tipo">—</span></div>
+            <div class="summary-row"><span>Material</span><span id="s-material">—</span></div>
+            <div class="summary-row"><span>Tamaño</span><span id="s-size">—</span></div>
+            <div class="summary-row"><span>Plazo</span><span id="s-plazo">—</span></div>
+            <div class="summary-row"><span>Nombre</span><span id="s-nombre">—</span></div>
+            <div class="summary-row"><span>Teléfono</span><span id="s-telefono">—</span></div>
+            <div class="summary-row"><span>Email</span><span id="s-email">—</span></div>
+          </div>
+          <div class="budget-bar" id="budget-bar2">
+            <div class="budget-bar-label">Estimación orientativa</div>
+            <div class="budget-range" id="budget-range2">—</div>
+            <div class="budget-note">Recibirás un presupuesto exacto en menos de 24h</div>
+          </div>
+          <div class="form-nav">
+            <button type="button" class="btn-prev" onclick="goStep(2)">← Atrás</button>
+            <button type="submit" class="form-submit-wa">Enviar por WhatsApp 💬</button>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Tipo de proyecto</label>
-          <select>
-            <option value="">Selecciona una opción</option>
-            <option>Muebles a medida</option>
-            <option>Cocina integral</option>
-            <option>Puertas y ventanas</option>
-            <option>Terraza / Exterior</option>
-            <option>Instalación de parquet</option>
-            <option>Restauración</option>
-            <option>Otro</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Descripción del proyecto</label>
-          <textarea placeholder="Cuéntanos los detalles de tu proyecto, dimensiones aproximadas, material preferido..."></textarea>
-        </div>
-        <button type="submit" class="form-submit">Enviar solicitud →</button>
+
       </form>
     </div>
   </div>
@@ -1013,17 +1165,129 @@
     });
   }
 
-  // Form submit
-  function submitForm(e) {
+  // ── PRESUPUESTO WIZARD ──
+  const PRECIOS = {
+    muebles:      { min: 800,  max: 1800, unit: 'm²',    label: 'Superficie aproximada' },
+    cocina:       { min: 1500, max: 3500, unit: 'm²',    label: 'Superficie aproximada' },
+    puertas:      { min: 400,  max: 900,  unit: 'ud',    label: 'Nº de unidades' },
+    terraza:      { min: 300,  max: 800,  unit: 'm²',    label: 'Superficie aproximada' },
+    parquet:      { min: 40,   max: 90,   unit: 'm²',    label: 'Superficie aproximada' },
+    restauracion: { min: 200,  max: 700,  unit: 'pieza', label: 'Nº de piezas' },
+  };
+  const TIPO_LABELS = {
+    muebles: 'Muebles a medida', cocina: 'Cocina integral',
+    puertas: 'Puertas y ventanas', terraza: 'Terraza / Exterior',
+    parquet: 'Instalación de parquet', restauracion: 'Restauración', otro: 'Otro'
+  };
+
+  function updateEstimate() {
+    const tipo  = document.getElementById('f-tipo').value;
+    const size  = parseFloat(document.getElementById('f-size').value) || 0;
+    const bar   = document.getElementById('budget-bar');
+    const p     = PRECIOS[tipo];
+
+    document.getElementById('size-label').textContent = p ? p.label : 'Superficie aproximada';
+    document.getElementById('size-unit').textContent  = p ? p.unit  : 'm²';
+
+    if (p && size > 0) {
+      const lo = Math.round(size * p.min).toLocaleString('es-ES');
+      const hi = Math.round(size * p.max).toLocaleString('es-ES');
+      document.getElementById('budget-range').textContent = lo + ' € – ' + hi + ' €';
+      bar.classList.add('visible');
+    } else {
+      bar.classList.remove('visible');
+    }
+  }
+
+  let currentStep = 1;
+
+  function goStep(n) {
+    if (n > currentStep) {
+      if (currentStep === 1 && !document.getElementById('f-tipo').value) {
+        document.getElementById('f-tipo').classList.add('field-error');
+        document.getElementById('f-tipo').focus();
+        return;
+      }
+      if (currentStep === 2) {
+        const nombre = document.getElementById('f-nombre').value.trim();
+        const email  = document.getElementById('f-email').value.trim();
+        let ok = true;
+        if (!nombre) { document.getElementById('f-nombre').classList.add('field-error'); ok = false; }
+        if (!email || !email.includes('@')) { document.getElementById('f-email').classList.add('field-error'); ok = false; }
+        if (!ok) return;
+      }
+    }
+    document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+    document.getElementById('step' + currentStep).classList.remove('active');
+    document.getElementById('step' + n).classList.add('active');
+    for (let i = 1; i <= 3; i++) {
+      const dot = document.getElementById('dot' + i);
+      dot.classList.remove('active', 'done');
+      dot.textContent = i < n ? '✓' : i;
+      if (i < n) dot.classList.add('done');
+      else if (i === n) dot.classList.add('active');
+    }
+    for (let i = 1; i <= 2; i++)
+      document.getElementById('line' + i).classList.toggle('done', i < n);
+    if (n === 3) fillSummary();
+    currentStep = n;
+    document.getElementById('presupuesto-form').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function fillSummary() {
+    const tipo     = document.getElementById('f-tipo').value;
+    const size     = document.getElementById('f-size').value;
+    const unit     = document.getElementById('size-unit').textContent;
+    const material = document.getElementById('f-material').value;
+    document.getElementById('s-tipo').textContent     = TIPO_LABELS[tipo] || tipo || '—';
+    document.getElementById('s-material').textContent  = material || 'Sin preferencia';
+    document.getElementById('s-size').textContent     = size ? size + ' ' + unit : '—';
+    document.getElementById('s-plazo').textContent    = document.getElementById('f-plazo').value;
+    document.getElementById('s-nombre').textContent   = document.getElementById('f-nombre').value;
+    document.getElementById('s-telefono').textContent = document.getElementById('f-telefono').value || '—';
+    document.getElementById('s-email').textContent    = document.getElementById('f-email').value;
+    const est = document.getElementById('budget-range').textContent;
+    const bar2 = document.getElementById('budget-bar2');
+    if (est && est !== '—') {
+      document.getElementById('budget-range2').textContent = est;
+      bar2.classList.add('visible');
+    } else {
+      bar2.classList.remove('visible');
+    }
+  }
+
+  function sendWhatsApp(e) {
     e.preventDefault();
-    const btn = e.target.querySelector('.form-submit');
-    btn.textContent = '✓ ¡Solicitud enviada!';
+    const tipo     = TIPO_LABELS[document.getElementById('f-tipo').value] || document.getElementById('f-tipo').value;
+    const material = document.getElementById('f-material').value || 'Sin preferencia';
+    const size     = document.getElementById('f-size').value;
+    const unit     = document.getElementById('size-unit').textContent;
+    const plazo    = document.getElementById('f-plazo').value;
+    const nombre   = document.getElementById('f-nombre').value;
+    const telefono = document.getElementById('f-telefono').value;
+    const email    = document.getElementById('f-email').value;
+    const desc     = document.getElementById('f-desc').value;
+    const est      = document.getElementById('budget-range').textContent;
+
+    const lines = [
+      '¡Hola MaderArte! Quiero solicitar un presupuesto:',
+      '',
+      '📋 *Proyecto:* ' + tipo,
+      '🪵 *Material:* ' + material,
+      size ? '📐 *Tamaño:* ' + size + ' ' + unit : '',
+      '⏰ *Plazo:* ' + plazo,
+      est && est !== '—' ? '💰 *Estimación:* ' + est : '',
+      desc ? '📝 *Detalles:* ' + desc : '',
+      '',
+      '👤 *Nombre:* ' + nombre,
+      telefono ? '📞 *Teléfono:* ' + telefono : '',
+      '✉️ *Email:* ' + email,
+    ].filter(Boolean).join('\n');
+
+    window.open('https://wa.me/34612345678?text=' + encodeURIComponent(lines), '_blank');
+    const btn = e.target.querySelector('.form-submit-wa');
+    btn.textContent = '✓ ¡Abriendo WhatsApp!';
     btn.style.background = '#2d7a3a';
-    setTimeout(() => {
-      btn.textContent = 'Enviar solicitud →';
-      btn.style.background = '';
-      e.target.reset();
-    }, 3000);
   }
 
   // Sticky nav shadow
